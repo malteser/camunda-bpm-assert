@@ -1,10 +1,26 @@
 package org.camunda.bpm.engine.test.assertions;
 
-import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.*;
 import org.assertj.core.api.AbstractAssert;
-import org.camunda.bpm.engine.history.*;
+import org.assertj.core.api.Assertions;
+import org.camunda.bpm.engine.AuthorizationService;
+import org.camunda.bpm.engine.CaseService;
+import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.HistoryService;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.ManagementService;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.history.HistoricActivityInstanceQuery;
+import org.camunda.bpm.engine.history.HistoricCaseInstanceQuery;
+import org.camunda.bpm.engine.history.HistoricDetailQuery;
+import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
+import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
+import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
+import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
+import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
 import org.camunda.bpm.engine.runtime.ExecutionQuery;
 import org.camunda.bpm.engine.runtime.JobQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
@@ -95,6 +111,10 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
     return engine.getRuntimeService();
   }
 
+	protected CaseService caseService() {
+		return engine.getCaseService();
+	}
+
   protected FormService formService() {
     return engine.getFormService();
   }
@@ -146,7 +166,15 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
     return runtimeService().createProcessInstanceQuery();
   }
 
-  /* 
+	/*
+	   * CaseInstanceQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
+	   * {@link CaseDefinition}) by overriding this method in sub classes specialised to
+	   * verify a specific process engine domain class.
+	   */
+	protected CaseInstanceQuery caseInstanceQuery() {
+		return caseService().createCaseInstanceQuery();
+	}
+  /*
    * ExecutionQuery, unnarrowed. Narrow this to {@link ProcessInstance} (or {@link ProcessDefinition}) 
    * by overriding this method in sub classes specialised to verify a specific 
    * process engine domain class. 
@@ -191,7 +219,16 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
     return historyService().createHistoricProcessInstanceQuery();
   }
 
-  /* 
+	/*
+	   * HistoricCaseInstanceQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
+	   * {@link CaseDefinition}) by overriding this method in sub classes specialised to
+	   * verify a specific process engine domain class.
+	   */
+	protected HistoricCaseInstanceQuery historicCaseInstanceQuery() {
+		return historyService().createHistoricCaseInstanceQuery();
+	}
+
+  /*
    * HistoricTaskInstanceQuery, unnarrowed. Narrow this to {@link ProcessInstance} (or 
    * {@link ProcessDefinition}) by overriding this method in sub classes specialised to 
    * verify a specific process engine domain class. 
@@ -218,4 +255,12 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
     return repositoryService().createProcessDefinitionQuery();
   }
 
+	/*
+	   * CaseDefinitionQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
+	   * {@link CaseDefinition}) by overriding this method in sub classes specialised to
+	   * verify a specific process engine domain class.
+	   */
+	protected CaseDefinitionQuery caseDefinitionQuery() {
+		return repositoryService().createCaseDefinitionQuery();
+	}
 }

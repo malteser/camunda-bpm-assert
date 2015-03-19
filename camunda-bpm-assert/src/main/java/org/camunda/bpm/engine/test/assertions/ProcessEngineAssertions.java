@@ -1,12 +1,13 @@
 package org.camunda.bpm.engine.test.assertions;
 
-import org.camunda.bpm.engine.*;
+import org.assertj.core.api.Assertions;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.runtime.CaseInstance;
 import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-
-import org.assertj.core.api.Assertions;
 
 import java.util.Map;
 
@@ -93,6 +94,16 @@ public class ProcessEngineAssertions extends Assertions {
   public static ProcessInstanceAssert assertThat(final ProcessInstance actual) {
     return ProcessInstanceAssert.assertThat(processEngine(), actual);
   }
+
+	/**
+	 * Assert that... the given CaseInstance meets your expectations.
+	 *
+	 * @param   actual ProcessInstance under test
+	 * @return  Assert object offering ProcessInstance specific assertions.
+	 */
+	public static CaseInstanceAssert assertThat(final CaseInstance actual) {
+		return CaseInstanceAssert.assertThat(processEngine(), actual);
+	}
 
   /**
    * Assert that... the given Task meets your expecations.
