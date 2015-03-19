@@ -1,16 +1,28 @@
 package org.camunda.bpm.engine.test.assertions;
 
-import org.camunda.bpm.engine.*;
+import static java.lang.String.format;
+
+import org.camunda.bpm.engine.AuthorizationService;
+import org.camunda.bpm.engine.CaseService;
+import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.HistoryService;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.ManagementService;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.runtime.*;
+import org.camunda.bpm.engine.runtime.ExecutionQuery;
+import org.camunda.bpm.engine.runtime.Job;
+import org.camunda.bpm.engine.runtime.JobQuery;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.String.format;
 
 /**
  * Convenience class to access all assertions camunda BPM 
@@ -34,6 +46,16 @@ public class ProcessEngineTests extends ProcessEngineAssertions {
   public static RuntimeService runtimeService() {
     return processEngine().getRuntimeService();
   }
+
+	/**
+	 * Helper method to easily access CaseService
+	 *
+	 * @return  CaseService of process engine bound to this testing thread
+	 * @see     org.camunda.bpm.engine.CaseService
+	 */
+	public static CaseService caseService() {
+		return processEngine().getCaseService();
+	}
 
   /**
    * Helper method to easily access AuthorizationService
